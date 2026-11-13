@@ -1,54 +1,22 @@
-import getpass
-import re
+# 🔐 Verificador de Força de Senha
 
-SENHAS_COMUNS = {"123456", "12345678", "password", "senha", "qwerty", "admin", "abc123"}
+Script em Python que avalia a força de uma senha e sugere melhorias.
 
+## Como funciona
+- Verifica tamanho, letras maiúsculas e minúsculas, números e símbolos
+- Detecta senhas muito comuns
+- Usa `getpass`, então a senha não aparece na tela
+- Nada é salvo nem enviado para a internet
 
-def avaliar_senha(senha: str) -> tuple[str, list[str]]:
-    """Retorna a classificação da senha e uma lista de dicas de melhoria."""
-    if senha.lower() in SENHAS_COMUNS:
-        return "Muito fraca", ["Essa senha é extremamente comum. Troque imediatamente."]
+## Como executar
+```bash
+python verificador_senha.py
+```
 
-    pontos = 0
-    dicas = []
+## Tecnologias
+Python 3.9+
 
-    if len(senha) >= 12:
-        pontos += 2
-    elif len(senha) >= 8:
-        pontos += 1
-    else:
-        dicas.append("Use pelo menos 8 caracteres (o ideal é 12 ou mais).")
-
-    regras = [
-        (r"[a-z]", "Adicione letras minúsculas."),
-        (r"[A-Z]", "Adicione letras maiúsculas."),
-        (r"\d", "Adicione números."),
-        (r"[^\w\s]", "Adicione símbolos (!@#$%...)."),
-    ]
-    for padrao, dica in regras:
-        if re.search(padrao, senha):
-            pontos += 1
-        else:
-            dicas.append(dica)
-
-    if pontos <= 2:
-        nivel = "Fraca"
-    elif pontos <= 4:
-        nivel = "Média"
-    else:
-        nivel = "Forte"
-
-    return nivel, dicas
-
-
-def main():
-    print("=== Verificador de Força de Senha ===")
-    senha = getpass.getpass("Digite a senha (não aparece na tela): ")
-    nivel, dicas = avaliar_senha(senha)
-    print(f"\nClassificação: {nivel}")
-    for dica in dicas:
-        print(f" - {dica}")
-
-
-if __name__ == "__main__":
-    main()
+## Próximos passos
+- Checar vazamentos via hash (k-anonymity)
+- Interface gráfica
+- Testes automatizados com pytest
